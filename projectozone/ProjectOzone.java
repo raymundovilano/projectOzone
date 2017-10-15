@@ -8,6 +8,7 @@ package projectozone;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -103,8 +104,11 @@ public class ProjectOzone extends Application {
     RadioButton radiobtn5 = new RadioButton("Yes");
     RadioButton radiobtn6 = new RadioButton("No");
     
+    String usFieldAns = usField.getSelectedToggle().getUserData().toString();
+    String felonyAns = felonyField.getSelectedToggle().getUserData().toString();
+    String drugAns = drugScreeningField.getSelectedToggle().getUserData().toString();
     
-    
+    //String refName, String title, String company, String refPhone)
 // -- ALL TEXTFIELDS HERE -- //
    
      // Personal Information Form //
@@ -127,8 +131,8 @@ public class ProjectOzone extends Application {
     
     TextField schoolName = new TextField();
     TextField location = new TextField();
-    TextField yearsAttended = new TextField();
-    TextField degreeRecieved = new TextField(); // ComboBox
+    TextField yearsAttended = new TextField(); // ComboBox
+    TextField degreeRecieved = new TextField(); // ComboBox2
     TextField major = new TextField();
   
    // Reference Form //
@@ -138,7 +142,14 @@ public class ProjectOzone extends Application {
     TextField company = new TextField();
     TextField phone = new TextField();
     
+    String date;
+    String comboOne;
+    String comboTwo;
     
+    
+    // Array List //
+    
+    ArrayList<Applicant> list = new ArrayList<Applicant>();
     
     @Override
     public void start(Stage primaryStage) {
@@ -273,19 +284,22 @@ public class ProjectOzone extends Application {
         formPane2.setHgap(10);
         formPane2.setVgap(5);
         formPane2.add(citizen, 0, 0);
-        formPane2.add(radiobtn1, 0, 1);
-        formPane2.add(radiobtn2, 0, 2);
-        formPane2.add(felony, 4, 0);
-        formPane2.add(radiobtn3, 4, 1);
-        formPane2.add(radiobtn4, 4, 2);
-        formPane2.add(drugScreening, 7, 0);
-        formPane2.add(radiobtn5, 7, 1);
-        formPane2.add(radiobtn6, 7, 2);
+        formPane2.add(radiobtn1, 1, 0);
+        formPane2.add(radiobtn2, 2, 0);
+        formPane2.add(felony, 0, 3);
+        formPane2.add(radiobtn3, 1, 3);
+        formPane2.add(radiobtn4, 2, 3);
+        formPane2.add(drugScreening, 0, 6);
+        formPane2.add(radiobtn5, 1, 6);
+        formPane2.add(radiobtn6, 2, 6);
+        
+        
+        
         
         // Separator
         Separator sepHor = new Separator();
         sepHor.setValignment(VPos.CENTER);
-        GridPane.setConstraints(sepHor, 0, 6);
+        GridPane.setConstraints(sepHor, 0, 8);
         GridPane.setColumnSpan(sepHor, 10);
         formPane2.getChildren().add(sepHor);
     }
@@ -303,7 +317,7 @@ public class ProjectOzone extends Application {
         startDatePicker.setValue(LocalDate.now());
         formPane3.add(startDatePicker, 2, 1);
         
-        String date = startDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        date = startDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         formPane3.add(new Label("Desired Pay"), 4, 0);
         formPane3.add(desiredPay, 4, 1);
@@ -359,10 +373,11 @@ public class ProjectOzone extends Application {
         "3 Years",
         "4+ Years"
     );
-         ComboBox comboBox = new ComboBox(options);
+        ComboBox comboBox = new ComboBox(options);
         
         formPane4.add(new Label("Years Attended"), 4, 0);
         formPane4.add(comboBox, 4, 1);
+        comboOne = (String) comboBox.getValue();
         
         ObservableList<String> options2 = 
         FXCollections.observableArrayList(
@@ -371,11 +386,15 @@ public class ProjectOzone extends Application {
         "Bachelor's",
         "Master's",
         "Doctoral"
+                
+              
     );
         ComboBox comboBox2 = new ComboBox(options2);
         formPane4.add(new Label("Degree Recieved"),5, 0);
         formPane4.add(comboBox2,5, 1);
         
+        comboTwo = (String) comboBox2.getValue(); 
+         
         formPane4.add(new Label("Major"),7, 0);
         formPane4.add(major,7, 1);
         
@@ -417,8 +436,23 @@ public class ProjectOzone extends Application {
         
     }
     
+    
+    public void getAllFields(){
+ list.add(new Applicant (firstNameField.getText(), lastNameField.getText(), addressField.getText(), cityField.getText(), stateField.getText(),
+  zipField.getText(), phoneField.getText(), mobileField.getText(), emailField.getText(), position.getText(), date, desiredPay.getText(),
+ schoolName.getText(), location.getText(), comboOne, comboTwo, major.getText(), refName.getText(), title.getText(), 
+company.getText(), phone.getText()));
+        
+        
+        
+    }
+    
+    
     public static void main(String[] args) {
+        
         launch(args);
+        
+
     }
     
 }

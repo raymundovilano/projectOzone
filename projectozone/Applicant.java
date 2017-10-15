@@ -11,6 +11,79 @@ package projectozone;
  */
 public class Applicant {
 
+    /**
+     * @return the fieldAns
+     */
+    public String getFieldAns() {
+        return fieldAns;
+    }
+
+    /**
+     * @param fieldAns the fieldAns to set
+     */
+    public void setFieldAns(String fieldAns) {
+        this.fieldAns = fieldAns;
+    }
+
+    /**
+     * @return the felonyAns
+     */
+    public String getFelonyAns() {
+        return felonyAns;
+    }
+
+    /**
+     * @param felonyAns the felonyAns to set
+     */
+    public void setFelonyAns(String felonyAns) {
+        this.felonyAns = felonyAns;
+    }
+
+    /**
+     * @return the drugAns
+     */
+    public String getDrugAns() {
+        return drugAns;
+    }
+
+    /**
+     * @param drugAns the drugAns to set
+     */
+    public void setDrugAns(String drugAns) {
+        this.drugAns = drugAns;
+    }
+
+    public Applicant(String fname, String lname, String address, String city, String state, String zipCode, String phone, 
+            String mobile, String email, String fieldAns, String felonyAns, String drugAns, String position, String startDate, 
+            String pay, String school, String location, String years, String degree, String major, String refName, 
+            String title, String company, String refPhone) {
+        
+        this.fname = fname;
+        this.lname = lname;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.phone = phone;
+        this.mobile = mobile;
+        this.email = email;
+        this.fieldAns = fieldAns;
+        this.felonyAns = felonyAns;
+        this.drugAns = drugAns;
+        this.position = position;
+        this.startDate = startDate;
+        this.pay = pay;
+        this.school = school;
+        this.location = location;
+        this.years = years;
+        this.degree = degree;
+        this.major = major;
+        this.refName = refName;
+        this.title = title;
+        this.company = company;
+        this.refPhone = refPhone;
+    }
+
     private String fname;
     private String lname;
     private String address;
@@ -20,6 +93,10 @@ public class Applicant {
     private String phone;
     private String mobile;
     private String email;
+    //Buttons on Part 1
+    private String fieldAns;
+    private String felonyAns;
+    private String drugAns;
     // Split1
     private String position;
     private String startDate;
@@ -37,29 +114,7 @@ public class Applicant {
     private String refPhone;
     
     // Constructor
-    public Applicant(String fname, String lname, String address, String city, String state, String zipCode, String phone, String mobile, String email, String position, String startDate, String pay, String school, String location, String years, String degree, String major, String refName, String title, String company, String refPhone) {
-        this.fname = fname;
-        this.lname = lname;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.phone = phone;
-        this.mobile = mobile;
-        this.email = email;
-        this.position = position;
-        this.startDate = startDate;
-        this.pay = pay;
-        this.school = school;
-        this.location = location;
-        this.years = years;
-        this.degree = degree;
-        this.major = major;
-        this.refName = refName;
-        this.title = title;
-        this.company = company;
-        this.refPhone = refPhone;
-    }
+   
 
     /**
      * @return the fname
