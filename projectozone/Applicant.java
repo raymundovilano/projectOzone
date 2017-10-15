@@ -11,47 +11,7 @@ package projectozone;
  */
 public class Applicant {
 
-    /**
-     * @return the fieldAns
-     */
-    public String getFieldAns() {
-        return fieldAns;
-    }
-
-    /**
-     * @param fieldAns the fieldAns to set
-     */
-    public void setFieldAns(String fieldAns) {
-        this.fieldAns = fieldAns;
-    }
-
-    /**
-     * @return the felonyAns
-     */
-    public String getFelonyAns() {
-        return felonyAns;
-    }
-
-    /**
-     * @param felonyAns the felonyAns to set
-     */
-    public void setFelonyAns(String felonyAns) {
-        this.felonyAns = felonyAns;
-    }
-
-    /**
-     * @return the drugAns
-     */
-    public String getDrugAns() {
-        return drugAns;
-    }
-
-    /**
-     * @param drugAns the drugAns to set
-     */
-    public void setDrugAns(String drugAns) {
-        this.drugAns = drugAns;
-    }
+  
 
     public Applicant(String fname, String lname, String address, String city, String state, String zipCode, String phone, 
             String mobile, String email, String fieldAns, String felonyAns, String drugAns, String position, String startDate, 
@@ -115,6 +75,47 @@ public class Applicant {
     
     // Constructor
    
+      /**
+     * @return the fieldAns
+     */
+    public String getFieldAns() {
+        return fieldAns;
+    }
+
+    /**
+     * @param fieldAns the fieldAns to set
+     */
+    public void setFieldAns(String fieldAns) {
+        this.fieldAns = fieldAns;
+    }
+
+    /**
+     * @return the felonyAns
+     */
+    public String getFelonyAns() {
+        return felonyAns;
+    }
+
+    /**
+     * @param felonyAns the felonyAns to set
+     */
+    public void setFelonyAns(String felonyAns) {
+        this.felonyAns = felonyAns;
+    }
+
+    /**
+     * @return the drugAns
+     */
+    public String getDrugAns() {
+        return drugAns;
+    }
+
+    /**
+     * @param drugAns the drugAns to set
+     */
+    public void setDrugAns(String drugAns) {
+        this.drugAns = drugAns;
+    }
 
     /**
      * @return the fname

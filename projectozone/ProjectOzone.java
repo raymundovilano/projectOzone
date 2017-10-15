@@ -9,6 +9,7 @@ package projectozone;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -48,7 +50,7 @@ public class ProjectOzone extends Application {
      GridPane formPane3 = new GridPane();   
      GridPane formPane4 = new GridPane();   
      GridPane formPane5 = new GridPane();   
-     
+     GridPane pane = new GridPane();
     
     //  -- ALL BOXES HERE --  // 
     HBox headingBox = new HBox();
@@ -61,6 +63,7 @@ public class ProjectOzone extends Application {
     VBox gridBox4 = new VBox(); // Education
     VBox gridBox5 = new VBox(); // Reference
     HBox leftButtonBox = new HBox(); // Reference
+    HBox girdBox5Vertical = new HBox();
     
     
     // -- ALL IMAGES HERE -- //
@@ -89,26 +92,9 @@ public class ProjectOzone extends Application {
  
     
     
+  
     
- // -- ALL TOGGLE GROUPS & BUTTONS HERE -- //
-
-    ToggleGroup usField = new ToggleGroup();
-    RadioButton radiobtn1 = new RadioButton("Yes");
-    RadioButton radiobtn2 = new RadioButton("No");
     
-    ToggleGroup felonyField = new ToggleGroup();
-    RadioButton radiobtn3 = new RadioButton("Yes");
-    RadioButton radiobtn4 = new RadioButton("No");
-    
-    ToggleGroup drugScreeningField = new ToggleGroup();
-    RadioButton radiobtn5 = new RadioButton("Yes");
-    RadioButton radiobtn6 = new RadioButton("No");
-    
-    String usFieldAns = usField.getSelectedToggle().getUserData().toString();
-    String felonyAns = felonyField.getSelectedToggle().getUserData().toString();
-    String drugAns = drugScreeningField.getSelectedToggle().getUserData().toString();
-    
-    //String refName, String title, String company, String refPhone)
 // -- ALL TEXTFIELDS HERE -- //
    
      // Personal Information Form //
@@ -124,7 +110,7 @@ public class ProjectOzone extends Application {
     
      // Position Info Form //
     TextField position = new TextField();
-    TextField startDate = new TextField();
+    //TextField startDate = new TextField();
     TextField desiredPay = new TextField();
     
      // Education Form //
@@ -142,14 +128,23 @@ public class ProjectOzone extends Application {
     TextField company = new TextField();
     TextField phone = new TextField();
     
+    // Global Strings
+    
     String date;
     String comboOne;
     String comboTwo;
     
+      
+    String usFieldAns;
+    String felonyAns;
+    String drugAns;
     
-    // Array List //
+    // Array Lists //
     
-    ArrayList<Applicant> list = new ArrayList<Applicant>();
+    ArrayList<Applicant> list = new ArrayList<>();
+    
+    List<TextField> tfList = new ArrayList<>();
+    
     
     @Override
     public void start(Stage primaryStage) {
@@ -210,27 +205,11 @@ public class ProjectOzone extends Application {
         
         fifthGrid();
         
+        // getAllFields(); // Add all data to an object and store in ArrayList
         
-        centerBox.getChildren().addAll(gridBox1, gridBox2, gridBox3, gridBox4, gridBox5);
+        centerBox.getChildren().addAll(gridBox1, gridBox2, gridBox3, gridBox4, pane);
         root.setCenter(centerBox);
-        
-        
-        //Buttons
-        radiobtn1.setToggleGroup(usField);
-       // radiobtn1.setSelected(true);
-        radiobtn2.setToggleGroup(usField);
-        
-        radiobtn3.setToggleGroup(felonyField);
-        radiobtn4.setToggleGroup(felonyField);
-        
-        radiobtn5.setToggleGroup(drugScreeningField);
-        radiobtn6.setToggleGroup(drugScreeningField);
-        
-
-        
         Scene scene = new Scene(root, 300, 250);
-       
-        
         primaryStage.setTitle("UTRGV: Application for Employment");
         primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
@@ -245,31 +224,33 @@ public class ProjectOzone extends Application {
                                              //(top/right/bottom/left)
         formPane.add(new Label("First Name: ") , 0, 0);
         formPane.add(firstNameField , 1, 0);
+        tfList.add(firstNameField);
         // formPane.add("", 2, 0);
         formPane.add(new Label("Last Name: ") , 2, 0);
         formPane.add(lastNameField , 3, 0);
-        
+        tfList.add(lastNameField);
         formPane.add(new Label("Address: ") , 0, 2);
         formPane.add(addressField , 1, 2);
-        
+        tfList.add(addressField);
         formPane.add(new Label("City:") , 2, 2);
         formPane.add(cityField , 3, 2);
-        
+        tfList.add(cityField);
         formPane.add(new Label("State:") , 4, 2);
         formPane.add(stateField , 5, 2);
-        
+        tfList.add(stateField);
         formPane.add(new Label("Zip:") , 6, 2);
         formPane.add(zipField , 7, 2);
-        
+        tfList.add(zipField);
         formPane.add(new Label("Phone Number:") , 0, 3);
         formPane.add(phoneField , 1, 3);
-        
+        tfList.add(phoneField);
         formPane.add(new Label("Mobile Number:") , 2, 3);
         formPane.add(mobileField , 3, 3);
-        
+        tfList.add(mobileField);
         formPane.add(new Label("Email Address:") , 4, 3);
         formPane.add(emailField , 5, 3);
- 
+        tfList.add(emailField);
+        
         // Separator
         Separator sepHor = new Separator();
         sepHor.setValignment(VPos.CENTER);
@@ -279,22 +260,36 @@ public class ProjectOzone extends Application {
     }
     
     public void secondGrid(){
-        gridBox2.getChildren().addAll(centerHeading2,formPane2);
         
+        
+         ObservableList<String> options = 
+        FXCollections.observableArrayList(
+        "Yes",
+        "No"
+    );
+         ComboBox comboBox = new ComboBox(options);
+         ComboBox comboBox2 = new ComboBox(options);
+         ComboBox comboBox3 = new ComboBox(options);
+         
+         
+         
+        gridBox2.getChildren().addAll(centerHeading2,formPane2);
         formPane2.setHgap(10);
         formPane2.setVgap(5);
         formPane2.add(citizen, 0, 0);
-        formPane2.add(radiobtn1, 1, 0);
-        formPane2.add(radiobtn2, 2, 0);
+        formPane2.add(comboBox, 1, 0);
         formPane2.add(felony, 0, 3);
-        formPane2.add(radiobtn3, 1, 3);
-        formPane2.add(radiobtn4, 2, 3);
+        formPane2.add(comboBox2, 1, 3);       
         formPane2.add(drugScreening, 0, 6);
-        formPane2.add(radiobtn5, 1, 6);
-        formPane2.add(radiobtn6, 2, 6);
-        
-        
-        
+        formPane2.add(comboBox3, 1, 6);
+       
+        usFieldAns = (String) comboBox.getValue();
+        felonyAns = (String) comboBox2.getValue();
+        drugAns = (String) comboBox3.getValue();
+       
+         
+         
+    
         
         // Separator
         Separator sepHor = new Separator();
@@ -310,6 +305,7 @@ public class ProjectOzone extends Application {
         formPane3.setVgap(2);
         formPane3.add(new Label("Position you are Applying For"),0,0 );
         formPane3.add(position , 0, 1 );
+        tfList.add(position);
         formPane3.add(new Label("Available Start Date"), 2, 0);
        // formPane3.add(startDate, 2, 1);
         
@@ -321,7 +317,7 @@ public class ProjectOzone extends Application {
 
         formPane3.add(new Label("Desired Pay"), 4, 0);
         formPane3.add(desiredPay, 4, 1);
-
+        tfList.add(desiredPay);
         
         ObservableList<String> options = 
         FXCollections.observableArrayList(
@@ -362,10 +358,10 @@ public class ProjectOzone extends Application {
         formPane4.setVgap(2);
         formPane4.add(new Label("School Name "), 0, 0);
         formPane4.add(schoolName, 0, 1);
-        
+        tfList.add(schoolName);
         formPane4.add(new Label("Location"), 2, 0);
         formPane4.add(location, 2, 1);
-        
+        tfList.add(location);
         ObservableList<String> options = 
         FXCollections.observableArrayList(
         "1 Year",
@@ -397,7 +393,9 @@ public class ProjectOzone extends Application {
          
         formPane4.add(new Label("Major"),7, 0);
         formPane4.add(major,7, 1);
+        tfList.add(major);
         
+        //Separator
         Separator sepHor = new Separator();
         sepHor.setValignment(VPos.CENTER);
         GridPane.setConstraints(sepHor, 0, 6);
@@ -411,39 +409,77 @@ public class ProjectOzone extends Application {
         gridBox5.getChildren().addAll(centerHeading4,formPane5);
         
         formPane5.setHgap(2);
-        formPane5.setVgap(2);
+        //formPane5.setVgap(2);
         formPane5.add(new Label("Name "), 0, 0);
         formPane5.add(refName, 0, 1);
-        
+        tfList.add(refName);
         formPane5.add(new Label("Title "), 2, 0);
         formPane5.add(title, 2, 1);
-        
+        tfList.add(title);
         formPane5.add(new Label("Company "), 4, 0);
         formPane5.add(company, 4, 1);
-        
+        tfList.add(company);
         formPane5.add(new Label("Phone "), 6, 0);
         formPane5.add(phone, 6, 1);
+        tfList.add(phone);
         
+        Button addButton = new Button("Add Applicant");
+       
+        formPane5.add(addButton, 7, 1);
         
+         addButton.setOnAction((ActionEvent event) -> {
+             getAllFields();
+        });
+   
+        Button clrButton = new Button("Clear Fields");
+       
+        formPane5.add(clrButton, 8, 1);
         
+         clrButton.setOnAction((ActionEvent event) -> {
+             ClearFields();
+        });
         
-        /*          
-    TextField refName = new TextField();
-    TextField title = new TextField();
-    TextField company = new TextField();
-    TextField phone = new TextField();
-        */
+       
+      // buttonBox.getChildren().addAll(addButton, clrButton);
+       
+        pane.setHgap(5); //horizontal gap in pixels => that's what you are asking for
+        pane.setVgap(5); //vertical gap in pixels
+        pane.setPadding(new Insets(10, 10, 10, 10)); //margins around the whole grid
         
+        pane.add(gridBox5, 0, 0);
+        pane.add(addButton, 8, 0);
+        pane.add(clrButton, 10, 0);
+       
     }
     
+    public void ClearFields(){
+        
+       for (TextField tf : tfList) {
+                tf.setText("");
+}
+    }
     
     public void getAllFields(){
- list.add(new Applicant (firstNameField.getText(), lastNameField.getText(), addressField.getText(), cityField.getText(), stateField.getText(),
-  zipField.getText(), phoneField.getText(), mobileField.getText(), emailField.getText(), position.getText(), date, desiredPay.getText(),
- schoolName.getText(), location.getText(), comboOne, comboTwo, major.getText(), refName.getText(), title.getText(), 
-company.getText(), phone.getText()));
+
+//            public Applicant(String fname, String lname, String address, String city, String state, String zipCode, String phone, 
+//            String mobile, String email, String fieldAns, String felonyAns, String drugAns, String position, String startDate, 
+//            String pay, String school, String location, String years, String degree, String major, String refName, 
+//            String title, String company, String refPhone) 
+//        
+        Applicant applicant = new Applicant (firstNameField.getText(), lastNameField.getText(), addressField.getText(), cityField.getText(), stateField.getText(),
+         zipField.getText(), phoneField.getText(), mobileField.getText(), emailField.getText(), usFieldAns, felonyAns, drugAns, position.getText(), date, desiredPay.getText(),
+         schoolName.getText(), location.getText(), comboOne, comboTwo, major.getText(), refName.getText(), title.getText(), 
+         company.getText(), phone.getText());
         
+        list.add(applicant);
+ 
+        int index = list.indexOf(applicant);
+       
+        String laname = (list.get(0).getLname());
         
+       System.out.println("Applicant: ["+ index +"] added!");
+       
+        System.out.println("Last Name:" + list.get(0).getLname() );
         
     }
     
