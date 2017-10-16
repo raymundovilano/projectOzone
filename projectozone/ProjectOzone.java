@@ -5,6 +5,18 @@
  */
 package projectozone;
 
+/*
+DONE	Allow the user to add an applicant
+-	Allow the user to look for an application based on
+            - Job application number or Applicant last and first names
+-	Allow the user to delete an application based on the job number or applicants name
+DONE	Allow the user to view applicants by clicking << or >> buttons for navigating the pool of applicants
+-	Allow the user to send any application to a file (Text file is fine for now)
+
+
+
+*/
+
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,18 +29,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -51,7 +63,7 @@ public class ProjectOzone extends Application {
      GridPane formPane4 = new GridPane();   
      GridPane formPane5 = new GridPane();   
      GridPane pane = new GridPane();
-    
+     GridPane displayPane = new GridPane();
     //  -- ALL BOXES HERE --  // 
     HBox headingBox = new HBox();
     VBox headingText = new VBox();
@@ -64,6 +76,7 @@ public class ProjectOzone extends Application {
     VBox gridBox5 = new VBox(); // Reference
     HBox leftButtonBox = new HBox(); // Reference
     HBox girdBox5Vertical = new HBox();
+    VBox blank = new VBox();
     
     
     // -- ALL IMAGES HERE -- //
@@ -88,12 +101,7 @@ public class ProjectOzone extends Application {
     Label felony = new Label("Have You Ever Been Convicted Of A Felony?");
     Label drugScreening = new Label("If Selected For Employment Are You Willing To"
             + " Submit to a Pre-Employment Drug Screening Test? ");
-    
- 
-    
-    
-  
-    
+
     
 // -- ALL TEXTFIELDS HERE -- //
    
@@ -133,8 +141,6 @@ public class ProjectOzone extends Application {
     String date;
     String comboOne;
     String comboTwo;
-    
-      
     String usFieldAns;
     String felonyAns;
     String drugAns;
@@ -145,6 +151,8 @@ public class ProjectOzone extends Application {
     
     List<TextField> tfList = new ArrayList<>();
     
+    // Array Index Variables
+    int x = 0;
     
     @Override
     public void start(Stage primaryStage) {
@@ -164,10 +172,31 @@ public class ProjectOzone extends Application {
         //Left of Pane: IDK WHAT
         
         Button homeButton = new Button("Home");
+        
+           homeButton.setOnAction((ActionEvent event) -> {
+               
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Information Dialog");
+                alert.setHeaderText("Look, an Information Dialog");
+                alert.setContentText("I have a great message for you!");
+                alert.showAndWait();
+                
+              root.setCenter(centerBox);
+        });
         Button announcementButton = new Button("Announcements");
-        Button profileButton = new Button("Profile");
+        Button displayApplicants = new Button("Applicants");
        
-        leftButtonBox.getChildren().addAll(homeButton, announcementButton, profileButton);
+         displayApplicants.setOnAction((ActionEvent event) -> {
+             
+               if (list.isEmpty())
+                 System.out.println("Error! No applicants");
+               else{
+                
+                displayInfo(x);
+             }
+        });
+         
+        leftButtonBox.getChildren().addAll(homeButton, announcementButton, displayApplicants);
         leftButtonBox.setSpacing(10);
         
         leftBox.setSpacing(10); 
@@ -209,6 +238,8 @@ public class ProjectOzone extends Application {
         
         centerBox.getChildren().addAll(gridBox1, gridBox2, gridBox3, gridBox4, pane);
         root.setCenter(centerBox);
+        
+        blank.getChildren().addAll(displayPane);
         Scene scene = new Scene(root, 300, 250);
         primaryStage.setTitle("UTRGV: Application for Employment");
         primaryStage.setMaximized(true);
@@ -452,6 +483,7 @@ public class ProjectOzone extends Application {
        
     }
     
+    // Function for clearing all text fields -> clrButton
     public void ClearFields(){
         
        for (TextField tf : tfList) {
@@ -459,13 +491,10 @@ public class ProjectOzone extends Application {
 }
     }
     
+    
+    // Function to get all text from fields -> addButton
     public void getAllFields(){
-
-//            public Applicant(String fname, String lname, String address, String city, String state, String zipCode, String phone, 
-//            String mobile, String email, String fieldAns, String felonyAns, String drugAns, String position, String startDate, 
-//            String pay, String school, String location, String years, String degree, String major, String refName, 
-//            String title, String company, String refPhone) 
-//        
+       
         Applicant applicant = new Applicant (firstNameField.getText(), lastNameField.getText(), addressField.getText(), cityField.getText(), stateField.getText(),
          zipField.getText(), phoneField.getText(), mobileField.getText(), emailField.getText(), usFieldAns, felonyAns, drugAns, position.getText(), date, desiredPay.getText(),
          schoolName.getText(), location.getText(), comboOne, comboTwo, major.getText(), refName.getText(), title.getText(), 
@@ -473,16 +502,75 @@ public class ProjectOzone extends Application {
         
         list.add(applicant);
  
-        int index = list.indexOf(applicant);
-       
-        String laname = (list.get(0).getLname());
-        
-       System.out.println("Applicant: ["+ index +"] added!");
-       
-        System.out.println("Last Name:" + list.get(0).getLname() );
+ 
         
     }
     
+    
+    
+    public void displayInfo(int i){
+         
+        
+        
+        displayPane.setHgap(2);
+        displayPane.setVgap(5);
+        
+        displayPane.setPadding(new Insets(10, 10, 10, 10));
+        
+        displayPane.add(new Label("Applicant Number: ["+ (i + 1) +"]"),0 , 0);
+        displayPane.add(new Label("Full Name:"),0 , 1);
+        displayPane.add(new Label(list.get(i).getFname()),1 , 1);
+        displayPane.add(new Label(list.get(i).getLname()),2 , 1);
+        displayPane.add(new Label("Address:"),0 , 2);
+        displayPane.add(new Label(list.get(i).getAddress()),1 , 2);
+        displayPane.add(new Label(list.get(i).getCity()),2 , 2);
+        displayPane.add(new Label(list.get(i).getState()),3 , 2);
+        displayPane.add(new Label(list.get(i).getZipCode()),4 , 2);
+        
+    
+        
+        
+        Button previous = new Button("<<");
+        
+         previous.setOnAction((ActionEvent event) -> {
+            try{ 
+             if (list.isEmpty())
+                 System.out.println("Error! No applicants");
+             else{
+             displayPane.getChildren().clear();
+             displayInfo(--x);
+             }
+             
+            }
+            catch(Exception e){
+        System.out.println("Warning: there are no previous appicants");
+     }
+        });
+         
+        Button next = new Button(">>");
+        
+         next.setOnAction((ActionEvent event) -> {
+           
+             try{
+                if (list.isEmpty())
+                 System.out.println("Error! No applicants");
+                else{
+                     displayPane.getChildren().clear();
+                     displayInfo(++x);
+               }
+             }
+             catch(Exception e){
+        System.out.println("Warning: there are no more applicants");
+     }
+        });
+         
+        HBox buttonBox = new HBox();
+        buttonBox.getChildren().addAll(previous, next);
+        
+        
+        root.setBottom(buttonBox);
+        root.setCenter(blank);
+    }
     
     public static void main(String[] args) {
         
