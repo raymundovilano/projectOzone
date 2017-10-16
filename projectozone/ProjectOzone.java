@@ -314,9 +314,9 @@ public class ProjectOzone extends Application {
         formPane2.add(drugScreening, 0, 6);
         formPane2.add(comboBox3, 1, 6);
        
-        usFieldAns = (String) comboBox.getValue();
-        felonyAns = (String) comboBox2.getValue();
-        drugAns = (String) comboBox3.getValue();
+        // usFieldAns = options.get(x);
+        //felonyAns = comboBox2.getValue());
+       // drugAns = comboBox3.getValue();
        
          
          
@@ -526,6 +526,22 @@ public class ProjectOzone extends Application {
         displayPane.add(new Label(list.get(i).getCity()),2 , 2);
         displayPane.add(new Label(list.get(i).getState()),3 , 2);
         displayPane.add(new Label(list.get(i).getZipCode()),4 , 2);
+        displayPane.add(new Label("Phone:"),0 , 5);
+        displayPane.add(new Label(list.get(i).getPhone()),1 , 5);
+        displayPane.add(new Label("Mobile Phone:"),4 , 5);
+        displayPane.add(new Label(list.get(i).getPhone()),5 , 5);
+        displayPane.add(new Label("Email:"),0 , 6);
+        displayPane.add(new Label(list.get(i).getEmail()),1 , 6);
+        displayPane.add(new Label("U.S. Citizenship:"),0 , 7);
+        displayPane.add(new Label(list.get(i).getFieldAns()),1 , 6);
+        displayPane.add(new Label("Convicted of felony:"),0 , 8);
+        displayPane.add(new Label(list.get(i).getFelonyAns()),1 , 8);
+        displayPane.add(new Label("Available for Drug Screening Test:"),0 , 9);
+        displayPane.add(new Label(list.get(i).getDrugAns()),1 , 9);
+        displayPane.add(new Label("Requested Position:"),0 , 10);
+        displayPane.add(new Label(list.get(i).getPosition()),1 , 10);
+        displayPane.add(new Label("Start Date:"),0 , 11);
+        displayPane.add(new Label(list.get(i).getStartDate()),1 , 11);
         
     
         
