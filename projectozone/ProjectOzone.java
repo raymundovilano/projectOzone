@@ -23,6 +23,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -139,11 +141,20 @@ public class ProjectOzone extends Application {
     // Global Strings
     
     String date;
-    String comboOne;
-    String comboTwo;
+    String employment;
+    String years;
+    String degree;
     String usFieldAns;
     String felonyAns;
     String drugAns;
+    
+    ComboBox<String> comboBox;
+    ComboBox<String> comboBox2;
+    ComboBox<String> comboBox3;
+    ComboBox<String> comboBox4;
+    ComboBox<String> comboBox5;
+    ComboBox<String> comboBox6;
+    
     
     // Array Lists //
     
@@ -177,8 +188,8 @@ public class ProjectOzone extends Application {
                
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Information Dialog");
-                alert.setHeaderText("Look, an Information Dialog");
-                alert.setContentText("I have a great message for you!");
+                //alert.setHeaderText("Look, an Information Dialog");
+                alert.setContentText("Returned to home page");
                 alert.showAndWait();
                 
               root.setCenter(centerBox);
@@ -289,21 +300,33 @@ public class ProjectOzone extends Application {
         GridPane.setColumnSpan(sepHor, 10);
         formPane.getChildren().add(sepHor);
     }
-    
+  
     public void secondGrid(){
         
         
-         ObservableList<String> options = 
-        FXCollections.observableArrayList(
-        "Yes",
-        "No"
-    );
-         ComboBox comboBox = new ComboBox(options);
-         ComboBox comboBox2 = new ComboBox(options);
-         ComboBox comboBox3 = new ComboBox(options);
-         
-         
-         
+    // Create the ComboBox
+		
+    
+                comboBox = new ComboBox<>();
+                comboBox.getItems().addAll(
+                     "Yes",
+                      "No"
+                );
+
+                comboBox2 = new ComboBox<>();
+                comboBox2.getItems().addAll(
+                     "Yes",
+                      "No"
+                );
+                
+                 comboBox3 = new ComboBox<>();
+                comboBox3.getItems().addAll(
+                     "Yes",
+                      "No"
+                );
+	
+                
+                
         gridBox2.getChildren().addAll(centerHeading2,formPane2);
         formPane2.setHgap(10);
         formPane2.setVgap(5);
@@ -314,9 +337,7 @@ public class ProjectOzone extends Application {
         formPane2.add(drugScreening, 0, 6);
         formPane2.add(comboBox3, 1, 6);
        
-        // usFieldAns = options.get(x);
-        //felonyAns = comboBox2.getValue());
-       // drugAns = comboBox3.getValue();
+        
        
          
          
@@ -350,31 +371,21 @@ public class ProjectOzone extends Application {
         formPane3.add(desiredPay, 4, 1);
         tfList.add(desiredPay);
         
-        ObservableList<String> options = 
-        FXCollections.observableArrayList(
-        "Full Time",
-        "Part Time",
-        "Seasonal/Temporary"
-    );
-         ComboBox comboBox = new ComboBox(options);
+        comboBox4 = new ComboBox<>();
+                comboBox4.getItems().addAll(
+                     "Full Time",
+                     "Part Time",
+                     "Seasonal/Temporary"
+                );
+                
          
          
           formPane3.add(new Label("Employment Desired"), 6, 0);
-          formPane3.add(comboBox, 6, 1);
+          formPane3.add(comboBox4, 6, 1);
          
-          //comboBox.getValue() for value of box
+          
+        
       
-          
-          /*
-      Button btn1 = new Button("Pendejo");
-        btn1.setOnAction((ActionEvent event) -> {
-            System.out.println(comboBox.getValue());
-        });
-       
-         formPane3.add(btn1, 8, 0);
-    
-          
-          */
         Separator sepHor = new Separator();
         sepHor.setValignment(VPos.CENTER);
         GridPane.setConstraints(sepHor, 0, 6);
@@ -393,34 +404,36 @@ public class ProjectOzone extends Application {
         formPane4.add(new Label("Location"), 2, 0);
         formPane4.add(location, 2, 1);
         tfList.add(location);
-        ObservableList<String> options = 
-        FXCollections.observableArrayList(
-        "1 Year",
-        "2 Years",
-        "3 Years",
-        "4+ Years"
-    );
-        ComboBox comboBox = new ComboBox(options);
+      
+        
+        comboBox5 = new ComboBox<>();
+                comboBox5.getItems().addAll(
+                     "1 Year",
+                     "2 Years",
+                     "3 Years",
+                     "4+ Years"
+                );
+                
         
         formPane4.add(new Label("Years Attended"), 4, 0);
-        formPane4.add(comboBox, 4, 1);
-        comboOne = (String) comboBox.getValue();
+        formPane4.add(comboBox5, 4, 1);
         
-        ObservableList<String> options2 = 
-        FXCollections.observableArrayList(
-        "None",
-        "Associate",
-        "Bachelor's",
-        "Master's",
-        "Doctoral"
+        
+     comboBox6 = new ComboBox<>();
+                comboBox6.getItems().addAll(
+                     "None",
+                     "Associate",
+                     "Bachelor",
+                     "Masters",
+                     "Doctoral"
+                );
                 
-              
-    );
-        ComboBox comboBox2 = new ComboBox(options2);
-        formPane4.add(new Label("Degree Recieved"),5, 0);
-        formPane4.add(comboBox2,5, 1);
+                
         
-        comboTwo = (String) comboBox2.getValue(); 
+        formPane4.add(new Label("Degree Recieved"),5, 0);
+        formPane4.add(comboBox6,5, 1);
+        
+        
          
         formPane4.add(new Label("Major"),7, 0);
         formPane4.add(major,7, 1);
@@ -460,6 +473,11 @@ public class ProjectOzone extends Application {
         
          addButton.setOnAction((ActionEvent event) -> {
              getAllFields();
+               Alert alert = new Alert(AlertType.INFORMATION);
+               alert.setTitle("Information Dialog");
+                //alert.setHeaderText("Look, an Information Dialog");
+                alert.setContentText("Applicant has been added");
+                alert.showAndWait();
         });
    
         Button clrButton = new Button("Clear Fields");
@@ -495,9 +513,16 @@ public class ProjectOzone extends Application {
     // Function to get all text from fields -> addButton
     public void getAllFields(){
        
+        usFieldAns = comboBox.getValue();
+        felonyAns = comboBox2.getValue();
+        drugAns = comboBox3.getValue();
+        employment = comboBox4.getValue();
+        years = comboBox5.getValue();
+        degree = comboBox6.getValue();
+                
         Applicant applicant = new Applicant (firstNameField.getText(), lastNameField.getText(), addressField.getText(), cityField.getText(), stateField.getText(),
-         zipField.getText(), phoneField.getText(), mobileField.getText(), emailField.getText(), usFieldAns, felonyAns, drugAns, position.getText(), date, desiredPay.getText(),
-         schoolName.getText(), location.getText(), comboOne, comboTwo, major.getText(), refName.getText(), title.getText(), 
+         zipField.getText(), phoneField.getText(), mobileField.getText(), emailField.getText(), usFieldAns, felonyAns, drugAns, position.getText(), date, desiredPay.getText(), employment,
+         schoolName.getText(), location.getText(), years, degree, major.getText(), refName.getText(), title.getText(), 
          company.getText(), phone.getText());
         
         list.add(applicant);
@@ -533,7 +558,7 @@ public class ProjectOzone extends Application {
         displayPane.add(new Label("Email:"),0 , 6);
         displayPane.add(new Label(list.get(i).getEmail()),1 , 6);
         displayPane.add(new Label("U.S. Citizenship:"),0 , 7);
-        displayPane.add(new Label(list.get(i).getFieldAns()),1 , 6);
+        displayPane.add(new Label(list.get(i).getFieldAns()),1 , 7);
         displayPane.add(new Label("Convicted of felony:"),0 , 8);
         displayPane.add(new Label(list.get(i).getFelonyAns()),1 , 8);
         displayPane.add(new Label("Available for Drug Screening Test:"),0 , 9);
@@ -542,6 +567,8 @@ public class ProjectOzone extends Application {
         displayPane.add(new Label(list.get(i).getPosition()),1 , 10);
         displayPane.add(new Label("Start Date:"),0 , 11);
         displayPane.add(new Label(list.get(i).getStartDate()),1 , 11);
+        displayPane.add(new Label("Desired Pay:"),3 , 11);
+        displayPane.add(new Label(list.get(i).getPay()),4 , 11);
         
     
         
@@ -550,7 +577,7 @@ public class ProjectOzone extends Application {
         
          previous.setOnAction((ActionEvent event) -> {
             try{ 
-             if (list.isEmpty())
+             if (list.isEmpty() || list.get(x-1).getFname().isEmpty())
                  System.out.println("Error! No applicants");
              else{
              displayPane.getChildren().clear();
@@ -568,7 +595,7 @@ public class ProjectOzone extends Application {
          next.setOnAction((ActionEvent event) -> {
            
              try{
-                if (list.isEmpty())
+                if (list.isEmpty() || list.get(x+1).getFname().isEmpty())
                  System.out.println("Error! No applicants");
                 else{
                      displayPane.getChildren().clear();

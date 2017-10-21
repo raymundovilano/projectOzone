@@ -11,11 +11,25 @@ package projectozone;
  */
 public class Applicant {
 
+    /**
+     * @return the employment
+     */
+    public String getEmployment() {
+        return employment;
+    }
+
+    /**
+     * @param employment the employment to set
+     */
+    public void setEmployment(String employment) {
+        this.employment = employment;
+    }
+
   
 
     public Applicant(String fname, String lname, String address, String city, String state, String zipCode, String phone, 
             String mobile, String email, String fieldAns, String felonyAns, String drugAns, String position, String startDate, 
-            String pay, String school, String location, String years, String degree, String major, String refName, 
+            String pay, String employment, String school, String location, String years, String degree, String major, String refName, 
             String title, String company, String refPhone) {
         
         this.fname = fname;
@@ -33,6 +47,7 @@ public class Applicant {
         this.position = position;
         this.startDate = startDate;
         this.pay = pay;
+        this.employment = employment;
         this.school = school;
         this.location = location;
         this.years = years;
@@ -61,6 +76,7 @@ public class Applicant {
     private String position;
     private String startDate;
     private String pay;
+    private String employment;
     // Split2
     private String school;        
     private String location;        
