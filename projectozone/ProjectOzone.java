@@ -7,20 +7,28 @@ package projectozone;
 
 /*
 DONE	Allow the user to add an applicant
--	Allow the user to look for an application based on
+DONE	Allow the user to look for an application based on
             - Job application number or Applicant last and first names
--	Allow the user to delete an application based on the job number or applicants name
+DONE	Allow the user to delete an application based on the job number or applicants name
 DONE	Allow the user to view applicants by clicking << or >> buttons for navigating the pool of applicants
--	Allow the user to send any application to a file (Text file is fine for now)
+NEXT	Allow the user to send any application to a file (Text file is fine for now)
 
 
 
 */
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -54,6 +62,7 @@ import javafx.stage.Stage;
  *
  * @author Raymundo
  */
+
 public class ProjectOzone extends Application {
     
     
@@ -70,6 +79,8 @@ public class ProjectOzone extends Application {
     HBox headingBox = new HBox();
     VBox headingText = new VBox();
     VBox leftBox = new VBox();
+    HBox searchBox = new HBox();
+    HBox deleteBox = new HBox();
     VBox centerBox = new VBox();
     VBox gridBox1 = new VBox(); // Personal Info
     VBox gridBox2 = new VBox(); // Personal Questions 
@@ -148,6 +159,17 @@ public class ProjectOzone extends Application {
     String felonyAns;
     String drugAns;
     
+    int indexSearch;
+    // Search stuff
+    
+    String searchField;
+    TextField searchBoxField = new TextField();
+   
+    // Delete stuff
+    String deleteField;
+    TextField deleteFieldBox = new TextField();
+    
+    // ComboBoxes instantiations.
     ComboBox<String> comboBox;
     ComboBox<String> comboBox2;
     ComboBox<String> comboBox3;
@@ -165,8 +187,11 @@ public class ProjectOzone extends Application {
     // Array Index Variables
     int x = 0;
     
+    // Date picker
+    DatePicker startDatePicker = new DatePicker();
+    
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
         
         //Top of Pane: LOGO and Headings 
         headingText.getChildren().addAll(heading1, heading2);
@@ -202,13 +227,62 @@ public class ProjectOzone extends Application {
                if (list.isEmpty())
                  System.out.println("Error! No applicants");
                else{
-                
+                displayPane.getChildren().clear();
                 displayInfo(x);
              }
         });
+        
+         Button searchButton = new Button("Search:");
          
+         searchButton.setOnAction((ActionEvent event) -> {
+             
+             
+             searchField = searchBoxField.getText();
+             
+             
+               if (list.isEmpty() || searchField.isEmpty() || searchBoxField.getText().isEmpty()){
+                 System.out.println("Error: search is empty");
+                 Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Information Dialog");
+                //alert.setHeaderText("Look, an Information Dialog");
+                alert.setContentText("No applicant found!");
+                alert.showAndWait();
+                }
+                else{   
+                searchApplicant(searchField);
+             }
+        });
+         
+        searchBox.getChildren().addAll(searchButton, searchBoxField);
+        searchBox.setSpacing(10);
+        
+        Button deleteButton = new Button("Delete:");
+        //  String deleteField;
+        deleteButton.setOnAction((ActionEvent event) -> {
+            
+            deleteField = deleteFieldBox.getText();
+            
+             if (list.isEmpty() || deleteField.isEmpty() || deleteFieldBox.getText().isEmpty()){
+                 System.out.println("Error: search is empty");
+                 Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Information Dialog");
+                alert.setContentText("No applicant found!");
+                alert.showAndWait();
+                }
+                else{   
+                deleteApplicant(deleteField);
+             }
+            
+        });
+        
+        deleteBox.getChildren().addAll(deleteButton, deleteFieldBox);
+        deleteBox.setSpacing(10);
+        
+        //searchBox.setPadding(new Insets(5));
         leftButtonBox.getChildren().addAll(homeButton, announcementButton, displayApplicants);
         leftButtonBox.setSpacing(10);
+        
+        
         
         leftBox.setSpacing(10); 
         leftBox.setPadding(new Insets(45)); // HBox spacing on all sides
@@ -217,11 +291,11 @@ public class ProjectOzone extends Application {
         leftHeading.setFont(new Font("Open Sans", 25));  // leftHeading Font
         leftHeading.setTextFill(Color.web("White")); // Heading1 Color
 
-        leftBox.getChildren().addAll(leftButtonBox,leftHeading); // Heading into Box
+        leftBox.getChildren().addAll(leftButtonBox, searchBox, deleteBox, leftHeading); // Heading into Box
         root.setLeft(leftBox);
         
         
-        // *** CENTER PANE *** 
+        // *** CENTER PANE *** //
         centerHeading1.setFont(new Font("Garamond", 20));  
         centerHeading1.setTextFill(Color.web("#12263f")); 
         centerHeading2.setFont(new Font("Garamond", 20));  
@@ -245,12 +319,18 @@ public class ProjectOzone extends Application {
         
         fifthGrid();
         
-        // getAllFields(); // Add all data to an object and store in ArrayList
+      
         
         centerBox.getChildren().addAll(gridBox1, gridBox2, gridBox3, gridBox4, pane);
         root.setCenter(centerBox);
-        
         blank.getChildren().addAll(displayPane);
+        
+        
+        
+        
+        
+        
+        
         Scene scene = new Scene(root, 300, 250);
         primaryStage.setTitle("UTRGV: Application for Employment");
         primaryStage.setMaximized(true);
@@ -361,11 +441,11 @@ public class ProjectOzone extends Application {
         formPane3.add(new Label("Available Start Date"), 2, 0);
        // formPane3.add(startDate, 2, 1);
         
-        DatePicker startDatePicker = new DatePicker();
+       
         startDatePicker.setValue(LocalDate.now());
         formPane3.add(startDatePicker, 2, 1);
         
-        date = startDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        
 
         formPane3.add(new Label("Desired Pay"), 4, 0);
         formPane3.add(desiredPay, 4, 1);
@@ -501,18 +581,21 @@ public class ProjectOzone extends Application {
        
     }
     
+    
+    
     // Function for clearing all text fields -> clrButton
     public void ClearFields(){
         
        for (TextField tf : tfList) {
                 tf.setText("");
 }
+       
     }
-    
     
     // Function to get all text from fields -> addButton
     public void getAllFields(){
        
+        date = startDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         usFieldAns = comboBox.getValue();
         felonyAns = comboBox2.getValue();
         drugAns = comboBox3.getValue();
@@ -530,18 +613,15 @@ public class ProjectOzone extends Application {
  
         
     }
-    
-    
-    
+   
+    // Function to add all info to a grid pane and display array of applicants, manipulable with index i.
     public void displayInfo(int i){
          
         
-        
+        try{
         displayPane.setHgap(2);
-        displayPane.setVgap(5);
-        
-        displayPane.setPadding(new Insets(10, 10, 10, 10));
-        
+        displayPane.setVgap(5);   
+        displayPane.setPadding(new Insets(10, 10, 10, 10));     
         displayPane.add(new Label("Applicant Number: ["+ (i + 1) +"]"),0 , 0);
         displayPane.add(new Label("Full Name:"),0 , 1);
         displayPane.add(new Label(list.get(i).getFname()),1 , 1);
@@ -553,8 +633,8 @@ public class ProjectOzone extends Application {
         displayPane.add(new Label(list.get(i).getZipCode()),4 , 2);
         displayPane.add(new Label("Phone:"),0 , 5);
         displayPane.add(new Label(list.get(i).getPhone()),1 , 5);
-        displayPane.add(new Label("Mobile Phone:"),4 , 5);
-        displayPane.add(new Label(list.get(i).getPhone()),5 , 5);
+        displayPane.add(new Label("Mobile Phone:"),3 , 5);
+        displayPane.add(new Label(list.get(i).getPhone()),4 , 5);
         displayPane.add(new Label("Email:"),0 , 6);
         displayPane.add(new Label(list.get(i).getEmail()),1 , 6);
         displayPane.add(new Label("U.S. Citizenship:"),0 , 7);
@@ -569,15 +649,36 @@ public class ProjectOzone extends Application {
         displayPane.add(new Label(list.get(i).getStartDate()),1 , 11);
         displayPane.add(new Label("Desired Pay:"),3 , 11);
         displayPane.add(new Label(list.get(i).getPay()),4 , 11);
+        displayPane.add(new Label("Employment Desired:"),0 , 12);
+        displayPane.add(new Label(list.get(i).getEmployment()),1 , 12);
+        displayPane.add(new Label("Alma mater:"),0 , 13);
+        displayPane.add(new Label(list.get(i).getSchool()),1 , 13);
+        displayPane.add(new Label("Location:"),3 , 13);
+        displayPane.add(new Label(list.get(i).getLocation()),4 , 13);
+        displayPane.add(new Label("Years attended:"),0 , 14);
+        displayPane.add(new Label(list.get(i).getYears()),1 , 14);
+        displayPane.add(new Label("Degree:"),3 , 14);
+        displayPane.add(new Label(list.get(i).getDegree()),4 , 14);
+        displayPane.add(new Label("Major:"),6 , 14);
+        displayPane.add(new Label(list.get(i).getMajor()),7 , 14);
+        displayPane.add(new Label("Reference:"),0 , 15);
+        displayPane.add(new Label(list.get(i).getRefName()),1 , 15);
+        displayPane.add(new Label("Title:"),3 , 15);
+        displayPane.add(new Label(list.get(i).getTitle()),4 , 15);
+        displayPane.add(new Label("Company:"),6 , 15);
+        displayPane.add(new Label(list.get(i).getCompany()),7 , 15);
+        displayPane.add(new Label("Phone:"),9 , 15);
+        displayPane.add(new Label(list.get(i).getRefPhone()),10 , 15);
         
     
         
         
-        Button previous = new Button("<<");
+        Button previous = new Button("Previous");
         
          previous.setOnAction((ActionEvent event) -> {
+             
             try{ 
-             if (list.isEmpty() || list.get(x-1).getFname().isEmpty())
+             if (list.isEmpty() || list.get(x-1).getFname().isEmpty() || list.get(x-1).getLname().isEmpty())
                  System.out.println("Error! No applicants");
              else{
              displayPane.getChildren().clear();
@@ -590,12 +691,12 @@ public class ProjectOzone extends Application {
      }
         });
          
-        Button next = new Button(">>");
+        Button next = new Button("Next");
         
          next.setOnAction((ActionEvent event) -> {
            
              try{
-                if (list.isEmpty() || list.get(x+1).getFname().isEmpty())
+                if (list.isEmpty() || list.get(x+1).getFname().isEmpty() || list.get(x+1).getLname().isEmpty())
                  System.out.println("Error! No applicants");
                 else{
                      displayPane.getChildren().clear();
@@ -607,14 +708,143 @@ public class ProjectOzone extends Application {
      }
         });
          
-        HBox buttonBox = new HBox();
-        buttonBox.getChildren().addAll(previous, next);
+         
+           Button fileApplicant = new Button("Send to Text");
         
+         fileApplicant.setOnAction((ActionEvent event) -> {
+           
+           
+             try{
+                if (list.isEmpty() || list.get(x).getFname().isEmpty() || list.get(x).getLname().isEmpty())
+                 System.out.println("Error! Applicant does not exists");
+                else{
+                    String fname = list.get(x).getFname();
+                    String lname = list.get(x).getLname();
+                     sendToFile(x, fname, lname);
+               }
+             }
+             catch(IOException e){
+        System.out.println("Warning: there are no more applicants");
+     }
+        });
+         
+         
+        HBox buttonBox = new HBox();
+        buttonBox.getChildren().addAll(previous, next, fileApplicant);
+        
+        buttonBox.setSpacing(10); 
+        buttonBox.setPadding(new Insets(10)); // HBox spacing on all sides
+        buttonBox.setStyle("-fx-background-color: #031937");
         
         root.setBottom(buttonBox);
         root.setCenter(blank);
+        }
+        catch(Exception e){
+            System.out.println("Out of boundaries");
+        }
     }
     
+    // Function to search a given FirstName or LastName into all applicants.
+    public void searchApplicant(String app){
+         
+        for (Applicant applicant : list) {
+          
+            try{
+            if (applicant.getFname().equals(app) || applicant.getLname().equals(app) )
+            {
+            //What to do when applicant is found
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Information Dialog");
+                //alert.setHeaderText("Look, an Information Dialog");
+                alert.setContentText("Applicant found!");
+                alert.showAndWait();
+                System.out.println("Found the applicant!");
+                indexSearch = list.indexOf(applicant);
+                x = indexSearch; // Set the global index to the search index.
+                displayPane.getChildren().clear();
+                displayInfo(indexSearch);
+            }
+            }
+            catch(NumberFormatException e)
+            {
+                 Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Information Dialog");
+                //alert.setHeaderText("Look, an Information Dialog");
+                alert.setContentText("No applicant found!");
+                alert.showAndWait();
+                System.out.println("Error, applicant not found");      
+            }
+}
+        
+        
+    }
+    
+    // Function to search a given First or LastName into all applicants and delete it from the arraylist
+    public void deleteApplicant(String app){
+     
+        try{
+        Iterator<Applicant> it = list.iterator();
+        while (it.hasNext()) {
+        Applicant applicant = it.next();
+        if (applicant.getFname().equals(app) || applicant.getLname().equals(app) ) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                //alert.setTitle("Information Dialog");
+                //alert.setHeaderText("Look, an Information Dialog");
+                alert.setContentText("Applicant deleted!");
+                alert.showAndWait();
+                
+                it.remove();
+                     }
+            }
+        }
+        catch(NumberFormatException e){
+            Alert alert = new Alert(AlertType.ERROR);
+                //alert.setTitle("Information Dialog");
+                //alert.setHeaderText("Look, an Information Dialog");
+                alert.setContentText("No applicant found!");
+                alert.showAndWait();
+                System.out.println("Error, applicant not found");  
+        }
+    }
+    
+    
+    public void sendToFile(int i, String fname, String lname) throws IOException{
+           
+          try{
+          String separator = System.getProperty("line.separator");
+          String formatStr = "%-20s %-15s %-15s %-15s %-15s%n";
+          
+            Writer ApplicantOutput = null;
+            File ApplicantFile = new File(fname+"_"+ lname +".txt");
+            ApplicantOutput = new BufferedWriter(new FileWriter(ApplicantFile));
+            ApplicantOutput.write("Information of applicant: \n");
+            ApplicantOutput.write(separator);
+            ApplicantOutput.write(String.format(formatStr, list.get(i).getFname(), list.get(i).getLname(), list.get(i).getAddress(), list.get(i).getCity(),
+                    list.get(i).getState()));
+            ApplicantOutput.write(String.format(formatStr, list.get(i).getZipCode(), list.get(i).getPhone(), list.get(i).getMobile(), list.get(i).getEmail(),
+                    ""));
+            ApplicantOutput.write(String.format(formatStr, list.get(i).getPosition(), list.get(i).getStartDate(), list.get(i).getPay(), list.get(i).getEmployment(),
+                    ""));
+            ApplicantOutput.write(String.format(formatStr, list.get(i).getSchool(), list.get(i).getLocation(), list.get(i).getYears(), list.get(i).getDegree(),
+                    list.get(i).getMajor()));
+            ApplicantOutput.write(String.format(formatStr, list.get(i).getRefName(), list.get(i).getCompany(), list.get(i).getRefPhone(), "",
+                    ""));
+   
+            
+            ApplicantOutput.close();
+            
+        } 
+           catch (IOException ioe) {
+               System.out.println("Error: could not file applicant");
+               ioe.printStackTrace();
+         }
+      }
+      
+//       public Applicant(String fname, String lname, String address, String city, String state, String zipCode, String phone, 
+//            String mobile, String email, String fieldAns, String felonyAns, String drugAns, String position, String startDate, 
+//            String pay, String employment, String school, String location, String years, String degree, String major, String refName, 
+//            String title, String company, String refPhone) {
+      
     public static void main(String[] args) {
         
         launch(args);
